@@ -1,4 +1,4 @@
-#summary Configuration options of the synatax highlighter plugin.
+#summary Configuration options of the formatter plugin.
 
 In the admin UI of ScrewTurn Wiki, you can provide a configuration string for plugins. This one supports three configuration options:
 
