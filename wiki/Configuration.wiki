@@ -1,0 +1,16 @@
+#summary Configuration options of the synatax highlighter plugin.
+
+In the admin UI of ScrewTurn Wiki, you can provide a configuration string for plugins. This one supports three configuration options:
+
+  * *ScriptUrl* The syntax highlighter needs to download some CSS, JavaScript, and Flash files. By default, these files are downloaded from my Dropbox (which makes quite a good poor man’s CDN). If you like to download them from somewhere else, specify the base URL in the ScriptUrl option. The best-performing way to deliver the files will be to download them onto the wiki’s web server and reference them with a relative URL.
+
+  * *Theme* The syntax highlighter offers some color-scheme themes. Pick one with this option; or omit it to use the default one.
+
+  * *DefaultLang* If no language is specified on a code block, the default language is used. Without specifying this option, no specific language is used and the code appears as plain text; specify the DefaultLang option to use another language as default.
+In this example the script files are loaded from a directory on the wiki server with the machine-absolute URL “/syntaxHighlighter/”, the white-on-black Emacs color theme is used, and the default language is C#.
+{{{
+ScriptUrl=/syntaxHighlighter/;
+Theme=Emacs;
+DefaultLang=csharp
+
+}}}
