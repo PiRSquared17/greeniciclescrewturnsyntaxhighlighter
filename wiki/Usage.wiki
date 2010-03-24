@@ -1,6 +1,6 @@
 #summary Usage of the formatter plugin
 
-= Adding formattedcode to wiki pages =
+= Adding formatted code to wiki pages =
 
 The markup for code in ScrewTurn Wiki is:
 {{{
