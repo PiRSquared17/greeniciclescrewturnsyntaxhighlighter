@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxHighlightPlugin.Test", "SyntaxHighlightPlugin.Test\SyntaxHighlightPlugin.Test.csproj", "{4D089FD7-CF3B-4027-B658-9D82482CCEF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxHighlightPlugin", "SyntaxHighlightPlugin\SyntaxHighlightPlugin.csproj", "{0B228613-24F3-47A8-886A-E34C75DE6F32}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D089FD7-CF3B-4027-B658-9D82482CCEF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D089FD7-CF3B-4027-B658-9D82482CCEF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D089FD7-CF3B-4027-B658-9D82482CCEF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D089FD7-CF3B-4027-B658-9D82482CCEF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B228613-24F3-47A8-886A-E34C75DE6F32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B228613-24F3-47A8-886A-E34C75DE6F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B228613-24F3-47A8-886A-E34C75DE6F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B228613-24F3-47A8-886A-E34C75DE6F32}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
