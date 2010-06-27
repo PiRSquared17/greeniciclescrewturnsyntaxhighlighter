@@ -3,6 +3,7 @@
 
 = Supported Programming Languages =
 Use one of the keywords as the first word of the code block.
+These languages are supported out of the box; see [Configuration] on how to add custom languages.
 
 ||_Langage_     ||_Keyword_||
 ||ActionScript3	||as3, actionscript3 ||
