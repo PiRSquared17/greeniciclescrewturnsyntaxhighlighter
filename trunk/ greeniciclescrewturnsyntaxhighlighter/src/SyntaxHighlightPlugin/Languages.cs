@@ -6,9 +6,18 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
   /// <summary>
   /// Provides the supported programming languages.
   /// </summary>
-  public static class Languages
+  public class Languages
   {
-    private static Dictionary<string, string> s_Brushes;
+    private Dictionary<string, string> m_Brushes = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
+
+    /// <summary>
+    /// Constructor. When a Languages class is created, 
+    /// a list of predefined languages ("brushes") is created.
+    /// </summary>
+    public Languages()
+    {
+      InitializeBrushes();
+    }
 
     /// <summary>
     /// Returns if a programming language is supported by the formatter.
@@ -17,15 +26,14 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// <param name="language">The programming language name to test.</param>
     /// <returns><c>true</c> if the provided language is supported,
     /// otherwise, <c>false.</c></returns>
-    public static bool IsSupported( string language )
+    public  bool IsSupported( string language )
     {
       if( string.IsNullOrEmpty( language ) )
       {
         throw new ArgumentNullException( "language");
       }
-      InitializeBrushes();
       string key = language.Trim();
-      return s_Brushes.ContainsKey( key );
+      return m_Brushes.ContainsKey( key );
     }
 
     /// <summary>
@@ -34,78 +42,90 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// <param name="language">The programming language name.</param>
     /// <returns>The name of a brush CSS file, or <c>null</c>
     /// if the language is not supported.</returns>
-    public static string GetStylesheetFile( string language )
+    public string GetStylesheetFile( string language )
     {
       if( string.IsNullOrEmpty( language ) )
       {
         throw new ArgumentNullException( "language");
       }
-      InitializeBrushes();
 
       string stylesheetFile;
       string key = language.Trim();
-      s_Brushes.TryGetValue( key, out stylesheetFile );
+      m_Brushes.TryGetValue( key, out stylesheetFile );
       return stylesheetFile;
+    }
+
+    /// <summary>
+    /// Adds a user-defined language brush to the set of supported languages.
+    /// </summary>
+    /// <param name="language">The name of the language, as given as the first word in a code block</param>
+    /// <param name="stylesheetFile">Name of the additional language ("brush") javascript file
+    /// within the syntax hightlighter directory.</param>
+    public  void AddLanguage( string language, string stylesheetFile )
+    {
+      if( string.IsNullOrEmpty( language ) )
+      {
+        throw new ArgumentNullException( "language" );
+      }
+      if( string.IsNullOrEmpty( stylesheetFile ) )
+      {
+        throw new ArgumentNullException( "stylesheetFile" );
+      }
+      m_Brushes[ language.ToLowerInvariant() ] = stylesheetFile;
     }
 
     /// <summary>
     /// Initializes the list of supported language names and associates them
     /// with a brush style sheet.
     /// </summary>
-    private static void InitializeBrushes()
+    private void InitializeBrushes()
     {
-      if( s_Brushes != null ) 
-      {
-        return;
-      }
-      s_Brushes = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
-
-      s_Brushes.Add( "as3", "shBrushAS3.js" );
-      s_Brushes.Add( "actionscript3", "shBrushAS3.js" );
-      s_Brushes.Add( "bash", "shBrushBash.js" );
-      s_Brushes.Add( "shell", "shBrushBash.js" );
-      s_Brushes.Add( "cf", "shBrushColdFusion.js" );
-      s_Brushes.Add( "coldfusion", "shBrushColdFusion.js" );
-      s_Brushes.Add( "c-sharp", "shBrushCSharp.js" );
-      s_Brushes.Add( "csharp", "shBrushCSharp.js" );
-      s_Brushes.Add( "cpp", "shBrushCpp.js" );
-      s_Brushes.Add( "c", "shBrushCpp.js" );
-      s_Brushes.Add( "css", "shBrushCss.js" );
-      s_Brushes.Add( "delphi", "shBrushDelphi.js" );
-      s_Brushes.Add( "pas", "shBrushDelphi.js" );
-      s_Brushes.Add( "pascal", "shBrushDelphi.js" );
-      s_Brushes.Add( "diff", "shBrushDiff.js" );
-      s_Brushes.Add( "patch", "shBrushDiff.js" );
-      s_Brushes.Add( "erl", "shBrushErlang.js" );
-      s_Brushes.Add( "erlang", "shBrushErlang.js" );
-      s_Brushes.Add( "groovy", "shBrushGroovy.js" );
-      s_Brushes.Add( "js", "shBrushJScript.js" );
-      s_Brushes.Add( "jscript", "shBrushJScript.js" );
-      s_Brushes.Add( "javascript", "shBrushJScript.js" );
-      s_Brushes.Add( "java", "shBrushJava.js" );
-      s_Brushes.Add( "jfx", "shBrushJavaFX.js" );
-      s_Brushes.Add( "javafx", "shBrushJavaFX.js" );
-      s_Brushes.Add( "pl", "shBrushPerl.js" );
-      s_Brushes.Add( "perl", "shBrushPerl.js" );
-      s_Brushes.Add( "php", "shBrushPhp.js" );
-      s_Brushes.Add( "plain", "shBrushPlain.js" );
-      s_Brushes.Add( "text", "shBrushPlain.js" );
-      s_Brushes.Add( "ps", "shBrushPowerShell.js" );
-      s_Brushes.Add( "powershell", "shBrushPowerShell.js" );
-      s_Brushes.Add( "py", "shBrushPython.js" );
-      s_Brushes.Add( "python", "shBrushPython.js" );
-      s_Brushes.Add( "rails", "shBrushRuby.js" );
-      s_Brushes.Add( "ror", "shBrushRuby.js" );
-      s_Brushes.Add( "ruby", "shBrushRuby.js" );
-      s_Brushes.Add( "scala", "shBrushScala.js" );
-      s_Brushes.Add( "sql", "shBrushSql.js" );
-      s_Brushes.Add( "vb", "shBrushVb.js" );
-      s_Brushes.Add( "vbnet", "shBrushVb.js" );
-      s_Brushes.Add( "xml", "shBrushXml.js" );
-      s_Brushes.Add( "xhtml", "shBrushXml.js" );
-      s_Brushes.Add( "html", "shBrushXml.js" );
-      s_Brushes.Add( "xslt", "shBrushXml.js" );
-      s_Brushes.Add( "xaml", "shBrushXml.js" );
+      m_Brushes.Add( "as3", "shBrushAS3.js" );
+      m_Brushes.Add( "actionscript3", "shBrushAS3.js" );
+      m_Brushes.Add( "bash", "shBrushBash.js" );
+      m_Brushes.Add( "shell", "shBrushBash.js" );
+      m_Brushes.Add( "cf", "shBrushColdFusion.js" );
+      m_Brushes.Add( "coldfusion", "shBrushColdFusion.js" );
+      m_Brushes.Add( "c-sharp", "shBrushCSharp.js" );
+      m_Brushes.Add( "csharp", "shBrushCSharp.js" );
+      m_Brushes.Add( "cpp", "shBrushCpp.js" );
+      m_Brushes.Add( "c", "shBrushCpp.js" );
+      m_Brushes.Add( "css", "shBrushCss.js" );
+      m_Brushes.Add( "delphi", "shBrushDelphi.js" );
+      m_Brushes.Add( "pas", "shBrushDelphi.js" );
+      m_Brushes.Add( "pascal", "shBrushDelphi.js" );
+      m_Brushes.Add( "diff", "shBrushDiff.js" );
+      m_Brushes.Add( "patch", "shBrushDiff.js" );
+      m_Brushes.Add( "erl", "shBrushErlang.js" );
+      m_Brushes.Add( "erlang", "shBrushErlang.js" );
+      m_Brushes.Add( "groovy", "shBrushGroovy.js" );
+      m_Brushes.Add( "js", "shBrushJScript.js" );
+      m_Brushes.Add( "jscript", "shBrushJScript.js" );
+      m_Brushes.Add( "javascript", "shBrushJScript.js" );
+      m_Brushes.Add( "java", "shBrushJava.js" );
+      m_Brushes.Add( "jfx", "shBrushJavaFX.js" );
+      m_Brushes.Add( "javafx", "shBrushJavaFX.js" );
+      m_Brushes.Add( "pl", "shBrushPerl.js" );
+      m_Brushes.Add( "perl", "shBrushPerl.js" );
+      m_Brushes.Add( "php", "shBrushPhp.js" );
+      m_Brushes.Add( "plain", "shBrushPlain.js" );
+      m_Brushes.Add( "text", "shBrushPlain.js" );
+      m_Brushes.Add( "ps", "shBrushPowerShell.js" );
+      m_Brushes.Add( "powershell", "shBrushPowerShell.js" );
+      m_Brushes.Add( "py", "shBrushPython.js" );
+      m_Brushes.Add( "python", "shBrushPython.js" );
+      m_Brushes.Add( "rails", "shBrushRuby.js" );
+      m_Brushes.Add( "ror", "shBrushRuby.js" );
+      m_Brushes.Add( "ruby", "shBrushRuby.js" );
+      m_Brushes.Add( "scala", "shBrushScala.js" );
+      m_Brushes.Add( "sql", "shBrushSql.js" );
+      m_Brushes.Add( "vb", "shBrushVb.js" );
+      m_Brushes.Add( "vbnet", "shBrushVb.js" );
+      m_Brushes.Add( "xml", "shBrushXml.js" );
+      m_Brushes.Add( "xhtml", "shBrushXml.js" );
+      m_Brushes.Add( "html", "shBrushXml.js" );
+      m_Brushes.Add( "xslt", "shBrushXml.js" );
+      m_Brushes.Add( "xaml", "shBrushXml.js" );
 
     }
   }

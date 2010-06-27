@@ -42,6 +42,17 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
       // Set default values
       DefaultLanguage = "text";
       Theme = "Default";
+      Languages = new Languages();
+    }
+
+    /// <summary>
+    /// Resolves language names (like "csharp" or "html") to the actual javascript files
+    /// ("brushes") that are provide highlighting for that language.
+    /// </summary>
+    protected internal Languages Languages
+    {
+      get;
+      private set;
     }
 
     /// <summary>
@@ -75,19 +86,27 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
 
         // Parse the configuration string. It should be a list of key/val pairs,
         // separated by semicolons.
-        if (!string.IsNullOrEmpty( m_ConfigurationString ))
+        if( !string.IsNullOrEmpty( m_ConfigurationString ) )
         {
-          foreach (string option in m_ConfigurationString.Split( ';' ))
+          foreach( string option in m_ConfigurationString.Split( ';' ) )
           {
             string[] parts = option.Split( '=' );
-            if (parts.Length == 2)
+            if( parts.Length == 2 )
             {
-              string key = parts[ 0 ].ToUpperInvariant().Trim();
+              string key = parts[ 0 ].Trim();
               string val = parts[ 1 ].Trim();
+              string keySpecifier = null;
 
-              if (!string.IsNullOrEmpty( key ) && !string.IsNullOrEmpty( val ))
+              string[] keyparts = key.Split( ':' );
+              if( keyparts.Length == 2 )
               {
-                switch (key)
+                key = keyparts[ 0 ].Trim();
+                keySpecifier = keyparts[ 1 ].Trim();
+              }
+
+              if( !string.IsNullOrEmpty( key ) && !string.IsNullOrEmpty( val ) )
+              {
+                switch( key.ToUpperInvariant() )
                 {
                   case "SCRIPTURL":
                     ClientScriptBaseUrl = val;
@@ -98,12 +117,19 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
                     break;
 
                   case "DEFAULTLANG":
-                    if (Languages.IsSupported( val ))
+                    if( Languages.IsSupported( val ) )
                     {
                       DefaultLanguage = val;
                     }
                     break;
-                }
+
+                  case "CUSTOMLANG":
+                    if( !string.IsNullOrEmpty( keySpecifier ) )
+                    {
+                      Languages.AddLanguage( keySpecifier, val );
+                    }
+                    break;
+                 }
               }
             }
           }
@@ -126,7 +152,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
       get
       {
         string baseUrl = m_ClientScriptBaseUrl ?? DefaultClientScriptBaseUrl;
-        if (!baseUrl.EndsWith( "/" ))
+        if( !baseUrl.EndsWith( "/" ) )
         {
           baseUrl = baseUrl + "/";
         }
@@ -205,7 +231,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// </summary>
     /// <param name="textBuilder"><see cref="StringBuilder"/> that creates the formatted text.</param>
     /// <param name="styleSheetName">File name of the style sheet.</param>
-    protected internal virtual void AppendStyleSheet(StringBuilder textBuilder, string styleSheetName)
+    protected internal virtual void AppendStyleSheet( StringBuilder textBuilder, string styleSheetName )
     {
       textBuilder.Append( "<link href='" );
       textBuilder.Append( ClientScriptBaseUrl );
@@ -219,7 +245,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// </summary>
     /// <param name="textBuilder"><see cref="StringBuilder"/> that creates the formatted text.</param>
     /// <param name="scriptName">File name of the script.</param>
-    protected internal virtual void AppendClientScript(StringBuilder textBuilder, string scriptName)
+    protected internal virtual void AppendClientScript( StringBuilder textBuilder, string scriptName )
     {
       textBuilder.Append( "<script src='" );
       textBuilder.Append( ClientScriptBaseUrl );
@@ -234,7 +260,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// </summary>
     /// <param name="textBuilder"><see cref="StringBuilder"/> that creates the formatted text.</param>
     /// <param name="language">The language.</param>
-    protected internal virtual void AppendBrushScript(StringBuilder textBuilder, string language)
+    protected internal virtual void AppendBrushScript( StringBuilder textBuilder, string language )
     {
       string scriptFile = Languages.GetStylesheetFile( language );
       AppendClientScript( textBuilder, scriptFile );
@@ -244,7 +270,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// Appends the reference to the theme-specific style sheet.
     /// </summary>
     /// <param name="textBuilder"><see cref="StringBuilder"/> that creates the formatted text.</param>
-    protected internal virtual void AppendThemeStylesheet(StringBuilder textBuilder)
+    protected internal virtual void AppendThemeStylesheet( StringBuilder textBuilder )
     {
       string stylesheet = string.Format( "shTheme{0}.css", Theme );
       AppendStyleSheet( textBuilder, stylesheet );
@@ -282,10 +308,10 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// that are actually needed because the language was found in a script block.
     /// </para>
     /// </remarks>
-    public virtual string Format(string raw, ContextInformation context, FormattingPhase phase)
+    public virtual string Format( string raw, ContextInformation context, FormattingPhase phase )
     {
       // This formatter exclusively runs in phase 2.
-      if (phase != FormattingPhase.Phase2)
+      if( phase != FormattingPhase.Phase2 )
       {
         return raw;
       }
@@ -304,11 +330,11 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
       string closingTag = @"</pre>";
       Regex regex = new Regex( openingTag + ".+?" + closingTag, RegexOptions.IgnoreCase | RegexOptions.Singleline );
       Match match = regex.Match( sourceText );
-      while (match.Success)
+      while( match.Success )
       {
         // Push the text before the found code block into the target text
         // without alteration
-        if (match.Index > 0)
+        if( match.Index > 0 )
         {
           targetText.Append( sourceText.Substring( 0, match.Index ) );
         }
@@ -337,7 +363,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
         // If a first word could be extracted (the block can as well be empty...),
         // and the language is supported, then...
         string language;
-        if (!string.IsNullOrEmpty( firstWord ) && Languages.IsSupported( firstWord ))
+        if( !string.IsNullOrEmpty( firstWord ) && Languages.IsSupported( firstWord ) )
         {
           // ... set the language for this block...
           language = firstWord;
@@ -353,7 +379,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
         }
 
         // Track the languages found on the page so we can include the correct set of script files.
-        if (!foundLanguages.Contains( language ))
+        if( !foundLanguages.Contains( language ) )
         {
           foundLanguages.Add( language );
         }
@@ -375,13 +401,13 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
       targetText.Append( sourceText );
 
       // If any formatted code blocks have been found, inject the highlighter scripts and style sheets.
-      if (foundLanguages.Any())
+      if( foundLanguages.Any() )
       {
         targetText.AppendLine( "\n<!-- START GreenIcicle code syntax highlighter -->\n" );
         AppendStyleSheet( targetText, "shCore.css" );
         AppendThemeStylesheet( targetText );
         AppendClientScript( targetText, "shCore.js" );
-        foreach (var language in foundLanguages)
+        foreach( var language in foundLanguages )
         {
           AppendBrushScript( targetText, language );
         }
@@ -407,7 +433,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// <param name="title"></param>
     /// <param name="context"></param>
     /// <returns>The original title.</returns>
-    public string PrepareTitle(string title, ContextInformation context)
+    public string PrepareTitle( string title, ContextInformation context )
     {
       return title;
     }
@@ -418,7 +444,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// </summary>
     /// <param name="host">Provides access to the wiki's API</param>
     /// <param name="config">Configuration string for the plugin.</param>
-    public void Init(IHostV30 host, string config)
+    public void Init( IHostV30 host, string config )
     {
       ConfigurationString = config;
     }
