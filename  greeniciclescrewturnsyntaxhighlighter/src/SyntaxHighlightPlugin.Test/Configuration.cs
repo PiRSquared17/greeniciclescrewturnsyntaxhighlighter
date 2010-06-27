@@ -206,6 +206,24 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter.Test
     }
 
     [Test]
+    public void CustomLang_MultipleCustomeLanguages_AllAreApplied()
+    {
+      // Arrange
+      // ------------
+
+      // Act
+      // ------------
+      m_Tested.ConfigurationString = "CustomLang:magic=shMagic.js;CustomLang:slippers=shSlippers.js";
+
+      // Assert
+      // ------------
+      Assert.That( m_Tested.Languages.IsSupported( "magic" ), Is.True );
+      Assert.That( m_Tested.Languages.IsSupported( "slippers" ), Is.True );
+      Assert.That( m_Tested.Languages.GetStylesheetFile( "magic" ), Is.EqualTo( "shMagic.js" ) );
+      Assert.That( m_Tested.Languages.GetStylesheetFile( "slippers" ), Is.EqualTo( "shSlippers.js" ) );
+    }
+
+    [Test]
     public void CustomLang_LanguageIsUndefined_IsIgnored()
     {
       // Arrange
