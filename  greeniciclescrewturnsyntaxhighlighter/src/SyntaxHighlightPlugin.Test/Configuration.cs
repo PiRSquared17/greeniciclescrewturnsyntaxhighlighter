@@ -171,6 +171,122 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter.Test
 
     #endregion
 
+    #region CustomLang
+
+    [Test]
+    public void CustomLang_CorrectlyFormed_IsApplied()
+    {
+      // Arrange
+      // ------------
+
+      // Act
+      // ------------
+      m_Tested.ConfigurationString = "CustomLang:magic=shMagic.js";
+
+      // Assert
+      // ------------
+      Assert.That( m_Tested.Languages.IsSupported( "magic" ), Is.True );
+      Assert.That( m_Tested.Languages.GetStylesheetFile( "magic" ), Is.EqualTo( "shMagic.js" ) );
+    }
+
+    [Test]
+    public void CustomLang_NameDiffersFromScript_IsApplied()
+    {
+      // Arrange
+      // ------------
+
+      // Act
+      // ------------
+      m_Tested.ConfigurationString = "CustomLang:magic=shSlippers.js";
+
+      // Assert
+      // ------------
+      Assert.That( m_Tested.Languages.IsSupported( "magic" ), Is.True );
+      Assert.That( m_Tested.Languages.GetStylesheetFile( "magic" ), Is.EqualTo( "shSlippers.js" ) );
+    }
+
+    [Test]
+    public void CustomLang_LanguageIsUndefined_IsIgnored()
+    {
+      // Arrange
+      // ------------
+      string defaultLang = m_Tested.DefaultLanguage;
+
+      // Act
+      // ------------
+      m_Tested.ConfigurationString = "CustomLang:=shMagic.js";
+
+      // Assert
+      // ------------
+      // No exception has occurred - that's enough
+    }
+
+    [Test]
+    public void CustomLang_BrushIsUndefined_IsIgnored()
+    {
+      // Arrange
+      // ------------
+      string defaultLang = m_Tested.DefaultLanguage;
+
+      // Act
+      // ------------
+      m_Tested.ConfigurationString = "CustomLang:magic=";
+
+      // Assert
+      // ------------
+      Assert.That( m_Tested.Languages.IsSupported( "magic" ), Is.False );
+    }
+
+    [Test]
+    public void CustomLang_BrushIsUndefinedWIthWhitespace_IsIgnored()
+    {
+      // Arrange
+      // ------------
+      string defaultLang = m_Tested.DefaultLanguage;
+
+      // Act
+      // ------------
+      m_Tested.ConfigurationString = "CustomLang:magic=     ";
+
+      // Assert
+      // ------------
+      Assert.That( m_Tested.Languages.IsSupported( "magic" ), Is.False );
+    }
+
+    [Test]
+    public void CustomLang_ValidWithWhitespace_IsApplied()
+    {
+      // Arrange
+      // ------------
+
+      // Act
+      // ------------
+      m_Tested.ConfigurationString = "   CustomLang:   magic     =     shMagic.js   ";
+
+      // Assert
+      // ------------
+      Assert.That( m_Tested.Languages.IsSupported( "magic" ), Is.True );
+      Assert.That( m_Tested.Languages.GetStylesheetFile( "magic" ), Is.EqualTo( "shMagic.js" ) );
+    }
+
+    [Test]
+    public void CustomLang_LanguageIsAlreadyUsed_OverridesStandardLanguage()
+    {
+      // Arrange
+      // ------------
+
+      // Act
+      // ------------
+      m_Tested.ConfigurationString = "CustomLang:xml=shMagic.js";
+
+      // Assert
+      // ------------
+      Assert.That( m_Tested.Languages.IsSupported( "xml" ), Is.True );
+      Assert.That( m_Tested.Languages.GetStylesheetFile( "xml" ), Is.EqualTo( "shMagic.js" ) );
+    }
+
+    #endregion
+
     #region Theme
     [Test]
     public void Theme_ValidTheme_IsApplied()
@@ -356,13 +472,14 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter.Test
 
       // Act
       // ------------
-      m_Tested.ConfigurationString = "ScriptUrl=/sh/;Theme=Emacs;DefaultLang=csharp";
+      m_Tested.ConfigurationString = "ScriptUrl=/sh/;CustomLang:magic=shMagic.js;Theme=Emacs;DefaultLang=csharp";
 
       // Assert
       // ------------
       Assert.That( m_Tested.ClientScriptBaseUrl, Is.EqualTo( "/sh/" ) );
       Assert.That( m_Tested.Theme, Is.EqualTo( "Emacs" ) );
       Assert.That( m_Tested.DefaultLanguage, Is.EqualTo( "csharp" ) );
+      Assert.That( m_Tested.Languages.GetStylesheetFile( "magic" ), Is.EqualTo( "shMagic.js" ) );
     }
 
     [Test]
