@@ -411,9 +411,8 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
         {
           AppendBrushScript( targetText, language );
         }
-        // Add script that activates the 
-        // syntax highlighter.
-        targetText.Append( "<script language='javascript'>\nSyntaxHighlighter.all();\n</script>" );
+        // Add script that activates the syntax highlighter.
+        targetText.Append("<script language='javascript'>\nSyntaxHighlighter.config.stripBrs=true;\nSyntaxHighlighter.all();\n</script>");
 
         targetText.AppendLine( "\n<!-- END GreenIcicle code syntax highlighter -->\n" );
       }
