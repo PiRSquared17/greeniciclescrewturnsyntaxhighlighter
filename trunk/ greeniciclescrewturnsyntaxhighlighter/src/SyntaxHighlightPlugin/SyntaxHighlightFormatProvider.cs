@@ -62,8 +62,8 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
     /// <remarks>
     /// By default, the plugin author's DropBox is used.
     /// </remarks>
-    /// <value>http://dl.dropbox.com/u/1900064/GreenIcicle/ScrewTurnSyntaxHighlighter/sh2.1.364/</value>
-    public const string DefaultClientScriptBaseUrl = "http://dl.dropbox.com/u/1900064/GreenIcicle/ScrewTurnSyntaxHighlighter/sh2.1.364/";
+    /// <value>http://dl.dropbox.com/u/1900064/GreenIcicle/ScrewTurnSyntaxHighlighter/sh3.0.83/</value>
+    public const string DefaultClientScriptBaseUrl = "http://dl.dropbox.com/u/1900064/GreenIcicle/ScrewTurnSyntaxHighlighter/sh3.0.83/";
 
     /// <summary>
     /// Opening tag of a code block as the default formatter returns it: a simple 
@@ -411,11 +411,9 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
         {
           AppendBrushScript( targetText, language );
         }
-        // Add script that hooks up the Flash-based clipboard helper, and the activate the 
+        // Add script that activates the 
         // syntax highlighter.
-        targetText.Append( "<script language='javascript'>\nSyntaxHighlighter.config.clipboardSwf = '" );
-        targetText.Append( ClientScriptBaseUrl );
-        targetText.Append( "scripts/clipboard.swf'\nSyntaxHighlighter.all();\n</script>" );
+        targetText.Append( "<script language='javascript'>\nSyntaxHighlighter.all();\n</script>" );
 
         targetText.AppendLine( "\n<!-- END GreenIcicle code syntax highlighter -->\n" );
       }
@@ -467,7 +465,7 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
         return new ComponentInformation(
           "GreenIcicle Syntax Highlighter",
           "Christian Heger",
-          "1.0.2",
+          "1.1.0",
           "http://greenicicleblog.com/ScrewTurnSyntaxHighlighter",
           "http://dl.dropbox.com/u/1900064/GreenIcicle/ScrewTurnSyntaxHighlighter/UpdateInfo.txt"
           );
@@ -485,13 +483,19 @@ namespace GreenIcicle.Screwturn3SyntaxHighlighter
 <div>
   <b>Options:</b><br/>
   <ul>
-  <li><b>ScriptUrl</b> The syntax highlighter needs to download some CSS, JavaScript, and Flash files. By default, these files are downloaded from my Dropbox (which makes quite a good poor man's CDN). If you like to download them from somewhere else, specify the base URL in the ScriptUrl option. The best-performing way to deliver the files will be to download them onto the wiki's web server and reference them with a relative URL.</li>
+    <li><b>ScriptUrl</b> The syntax highlighter needs to download some CSS and JavaScript files. By default, these files are downloaded from my Dropbox (which makes quite a good poor man's CDN). If you like to download them from somewhere else, specify the base URL in the ScriptUrl option. The best-performing way to deliver the files will be to download them onto the wiki's web server and reference them with a relative URL.</li>
 	<li><b>Theme</b> The syntax highlighter offers some color-scheme themes. Pick one with this option; or omit it to use the default one.</li>
 	<li><b>DefaultLang</b> If no language is specified on a code block, the default language is used. Without specifying this option, no specific language is used and the code appears as plain text; specify the DefaultLang option to use another language as default.</li> 
   </ul>
   <b>Example:</b><br/>
-  Load the scripts and style sheets from a local directory, and use C# as standard language.
+  Load the scripts and style sheets from a local directory, and use C# as standard language.<br/>
   ScriptUrl=/sh; DefaultLang=csharp
+  <br/><br/>
+  <b>Revisions</b>
+  <ul>
+    <li><b>1.0</b> Initial release. Runs against version 2.1 of  SyntaxHighlighter.</li>
+    <li><b>1.1</b> Uses version 3 of SyntaxHighlighter.</li>
+  </ul>
 </div>
       ";
       }
